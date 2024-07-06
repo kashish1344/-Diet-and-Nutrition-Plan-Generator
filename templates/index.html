@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diet and Nutrition Plan Generator</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 80%;
+            max-width: 1200px;
+            background-color: #174565;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+            transition: all 0.5s ease;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .form-container {
+            flex: 1;
+            margin-right: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            transition: all 0.5s ease;
+        }
+
+        .generated-content {
+            flex: 1;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            bottom: 40px;
+            transition: all 0.5s ease;
+            display: none;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2.5rem;
+            color: #343a40;
+        }
+
+        form {
+            width: 100%;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #76a3d0;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+        }
+
+        #recommendations {
+           
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #loading {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #007bff;
+            animation: spin 1s linear infinite;
+            margin: auto;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .title-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #131314;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="title-container">
+        <h1 class="title">Diet and Nutrition Plan Generator</h1>
+    </div>
+    <div class="container">
+        <div class="form-container" id="formContainer">
+            <form id="profileForm">
+                <div class="form-row">
+                    <div class="mb-3">
+                        <label for="age" class="form-label">Age:</label>
+                        <input type="number" class="form-control" id="age" name="age" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Gender:</label>
+                        <select id="gender" class="form-select form-control" name="gender" required>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="mb-3">
+                        <label for="height_cm" class="form-label">Height (cm):</label>
+                        <input type="number" class="form-control" id="height_cm" name="height_cm" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="weight_kg" class="form-label">Weight (kg):</label>
+                        <input type="number" class="form-control" id="weight_kg" name="weight_kg" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="health_conditions" class="form-label">Health Conditions:</label>
+                    <textarea id="health_conditions" class="form-control" name="health_conditions" placeholder="e.g., diabetes, hypertension"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="dietary_restrictions" class="form-label">Dietary Restrictions:</label>
+                    <textarea id="dietary_restrictions" class="form-control" name="dietary_restrictions" placeholder="e.g., gluten-free, dairy-free"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="genetic_predispositions" class="form-label">Genetic Predispositions:</label>
+                    <textarea id="genetic_predispositions" class="form-control" name="genetic_predispositions" placeholder="e.g., high cholesterol"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="wellness_goals" class="form-label">Wellness Goals:</label>
+                    <textarea id="wellness_goals" class="form-control" name="wellness_goals" placeholder="e.g., weight loss, muscle gain"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="preferred_diet" class="form-label">Preferred Diet:</label>
+                    <select id="preferred_diet" class="form-select form-control" name="preferred_diet" required>
+                        <option value="Non-Vegetarian">Non-Vegetarian</option>
+                        <option value="Vegetarian">Vegetarian</option>
+                        <option value="Vegan">Vegan</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Recommendations</button>
+            </form>
+            <div id="loading"></div>
+        </div>
+        <div class="generated-content" id="recommendations"></div>
+    </div>
+
+    <script>
+        document.getElementById('profileForm').onsubmit = function(event) {
+            event.preventDefault();
+            
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const height_cm = document.getElementById('height_cm').value;
+            const weight_kg = document.getElementById('weight_kg').value;
+            const health_conditions = document.getElementById('health_conditions').value.split(',').map(item => item.trim());
+            const dietary_restrictions = document.getElementById('dietary_restrictions').value.split(',').map(item => item.trim());
+            const genetic_predispositions = document.getElementById('genetic_predispositions').value.split(',').map(item => item.trim());
+            const wellness_goals = document.getElementById('wellness_goals').value.split(',').map(item => item.trim());
+            const preferred_diet = document.getElementById('preferred_diet').value;
+
+            const profileData = {
+                age: parseInt(age),
+                gender: gender,
+                height_cm: parseInt(height_cm),
+                weight_kg: parseInt(weight_kg),
+                health_conditions: health_conditions,
+                dietary_restrictions: dietary_restrictions,
+                genetic_predispositions: genetic_predispositions,
+                wellness_goals: wellness_goals,
+                preferred_diet: preferred_diet
+            };
+
+            const loadingIndicator = document.getElementById('loading');
+            loadingIndicator.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>';
+            loadingIndicator.style.display = 'block';
+
+            fetch('/generate_plan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(profileData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingIndicator.style.display = 'none';
+                const recommendationsContainer = document.getElementById('recommendations');
+                
+                const markdownContent = `
+### Diet Plan
+${data.diet_plan}
+
+### Summary
+${data.summary}
+                `;
+                
+                recommendationsContainer.innerHTML = marked.parse(markdownContent);
+                document.querySelector('.generated-content').style.display = 'block';
+            })
+            .catch(error => {
+                loadingIndicator.style.display = 'none';
+                console.error('Error:', error);
+            });
+        };
+    </script>
+</body>
+</html>
