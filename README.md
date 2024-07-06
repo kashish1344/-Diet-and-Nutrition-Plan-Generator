@@ -1,7 +1,12 @@
 
 # 🥗 Diet and Nutrition Plan Generator
+![logo](https://github.com/kashish1344/Diet-and-Nutrition-Plan-Generator/assets/83247791/a6d6f639-534d-47d9-a0aa-f9de2dfdde7d)
 
 This web application provides personalized diet and nutrition plans based on your unique health profile. It seamlessly integrates advanced technologies to manage health conditions, adhere to dietary restrictions, and achieve wellness goals.
+
+## Demo Video
+
+https://github.com/kashish1344/Diet-and-Nutrition-Plan-Generator/assets/83247791/d21c67d5-8301-4d3f-adfa-a71eb42698a2
 
 ## Technologies Used
 
@@ -17,7 +22,7 @@ This web application provides personalized diet and nutrition plans based on you
 ### Step 1: Clone the Repository
 Clone the application to your local machine:
 ```bash
-git clone https://github.com/kashish1344/-Diet-and-Nutrition-Plan-Generator.git
+git clone https://github.com/kashish1344/Diet-and-Nutrition-Plan-Generator.git
 ```
 
 ### Step 2: Navigate to the Application Directory
